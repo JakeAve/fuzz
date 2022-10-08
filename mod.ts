@@ -1,3 +1,4 @@
+import { removeConsecutiveDuplicates } from "./utils/removeConsecutiveDuplicates.ts";
 import { replaceDiacritics } from "./utils/replaceDiacritics.ts";
 
 export enum Factors {
@@ -9,26 +10,11 @@ export enum Factors {
 
 type Predicate = (input: string, string: string) => boolean;
 
-interface FactorList {
-  [key: string]: [Predicate, number];
-}
-
-const removeConsecutiveDuplicates = (s: string) => {
-  const n = s.length;
-  let str = "";
-  if (n == 0) return str;
-
-  for (let i = 0; i < n - 1; i++) {
-    if (s[i] != s[i + 1]) {
-      str += s[i];
-    }
-  }
-
-  str += s[n - 1];
-  return str;
+type Predicates = {
+  [k in Factors]: Predicate;
 };
 
-export const predicates = {
+export const predicates: Predicates = {
   [Factors.hasExactMatch]: (input: string, string: string) =>
     string.includes(input),
   [Factors.hasLettersInOrder]: (input: string, string: string) => {
@@ -61,23 +47,30 @@ export const predicates = {
   },
 };
 
-const factors: FactorList = {
-  [Factors.hasExactMatch]: [predicates[Factors.hasExactMatch], 50],
-  [Factors.hasLettersInOrder]: [predicates[Factors.hasLettersInOrder], 20],
-  [Factors.isSimilarWithoutConsecutives]: [
-    predicates[Factors.isSimilarWithoutConsecutives],
-    10,
-  ],
+type ScoringConfig = {
+  [k in Factors]?: number;
 };
 
-export const scoreMatch = (input: string, string: string) => {
+const defaultScoringConfig: ScoringConfig = {
+  [Factors.hasExactMatch]: 50,
+  [Factors.hasLettersInOrder]: 20,
+  [Factors.isSimilarWithoutConsecutives]: 20,
+  [Factors.hasDiatrics]: 10,
+};
+
+export const scoreMatch = (
+  input: string,
+  string: string,
+  config: ScoringConfig = defaultScoringConfig
+) => {
   input = input.toLowerCase();
   string = string.toLowerCase();
   let score = 0;
 
-  for (const f in factors) {
-    const [pred, points] = factors[f];
-    if (pred(input, string)) score += points;
+  for (const factor in config) {
+    const points = config[factor as Factors];
+    const pred = predicates[factor as Factors];
+    if (pred(input, string)) score += points as number;
   }
 
   return score;

@@ -1,8 +1,9 @@
 import {
   assertEquals,
   assert,
+  assertInstanceOf,
 } from "https://deno.land/std@0.159.0/testing/asserts.ts";
-import { Factors, predicates as ps } from "./mod.ts";
+import { Factors, predicates as ps, scoreMatch } from "./mod.ts";
 
 Deno.test("hasExactMatchPredicate works", () => {
   const isFooInFood = ps[Factors.hasExactMatch]("foo", "food");
@@ -55,4 +56,14 @@ Deno.test("hasDiatrics works", () => {
   assert(test6);
   const test7 = ps[Factors.hasDiatrics]("françois", "franswa");
   assertEquals(test7, false);
+});
+
+Deno.test("scoring matches returns numbers", () => {
+  const s1 = scoreMatch("foo", "food");
+  const s2 = scoreMatch("walk", "whamlkd");
+  const s3 = scoreMatch("cæsar", "caesar");
+  const s4 = scoreMatch("lluuck", "luckk");
+  const s5 = scoreMatch("pkgjson", "packagejson");
+  const results = [s1, s2, s3, s4, s5];
+  results.forEach((score) => assertEquals(typeof score, "number"));
 });
