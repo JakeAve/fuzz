@@ -39,3 +39,20 @@ Deno.test("isSimilarWithoutConsecutives works", () => {
   );
   assertEquals(ardvarkInElephant, false);
 });
+
+Deno.test("hasDiatrics works", () => {
+  const test1 = ps[Factors.hasDiatrics]("ándrés", "andres");
+  assert(test1);
+  const test2 = ps[Factors.hasDiatrics]("cliché", "cliche");
+  assert(test2);
+  const test3 = ps[Factors.hasDiatrics]("naïve", "naive");
+  assert(test3);
+  const test4 = ps[Factors.hasDiatrics]("são paulo", "sao paulo");
+  assert(test4);
+  const test5 = ps[Factors.hasDiatrics]("piñón", "pinon");
+  assert(test5);
+  const test6 = ps[Factors.hasDiatrics]("cæsar", "caesar"); // not the best test
+  assert(test6);
+  const test7 = ps[Factors.hasDiatrics]("françois", "franswa");
+  assertEquals(test7, false);
+});

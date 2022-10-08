@@ -1,7 +1,10 @@
+import { replaceDiacritics } from "./utils/replaceDiacritics.ts";
+
 export enum Factors {
   hasExactMatch = "hasExactMatch",
   hasLettersInOrder = "hasLettersInOrder",
-  isSimilarWithoutConsecutives = "hasMatchWithoutMultiples",
+  isSimilarWithoutConsecutives = "isSimilarWithoutConsecutives",
+  hasDiatrics = "hasDiatrics",
 }
 
 type Predicate = (input: string, string: string) => boolean;
@@ -48,6 +51,14 @@ export const predicates = {
       stringWithoutCons
     );
   },
+  [Factors.hasDiatrics]: (input: string, string: string) => {
+    const inputWithoutDiatrics = replaceDiacritics(input);
+    const stringWithoutDiatrics = replaceDiacritics(string);
+    return predicates[Factors.hasLettersInOrder](
+      inputWithoutDiatrics,
+      stringWithoutDiatrics
+    );
+  },
 };
 
 const factors: FactorList = {
@@ -60,6 +71,8 @@ const factors: FactorList = {
 };
 
 export const scoreMatch = (input: string, string: string) => {
+  input = input.toLowerCase();
+  string = string.toLowerCase();
   let score = 0;
 
   for (const f in factors) {
