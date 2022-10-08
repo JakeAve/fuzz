@@ -75,3 +75,23 @@ export const scoreMatch = (
 
   return score;
 };
+
+interface Scores {
+  [key: string]: number;
+}
+
+export const scoreMatches = (
+  input: string,
+  strings: string[],
+  config?: ScoringConfig
+) => {
+  const scores: Scores = {};
+  strings.forEach((str) => (scores[str] = scoreMatch(input, str, config)));
+
+  const scores2: Scores = {};
+  Object.entries(scores)
+    .sort(([, v1], [, v2]) => v2 - v1)
+    .forEach(([k, v]) => (scores2[k] = v));
+
+  return scores2;
+};
