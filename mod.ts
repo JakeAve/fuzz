@@ -1,4 +1,5 @@
 import { findLongestStreak } from "./utils/findLongestStreak.ts";
+import { getNumberOfSharedLetters } from "./utils/getNumberOfSharedLetters.ts";
 import { removeConsecutiveDuplicates } from "./utils/removeConsecutiveDuplicates.ts";
 import { replaceDiacritics } from "./utils/replaceDiacritics.ts";
 
@@ -8,6 +9,7 @@ export enum Factors {
   isSimilarWithoutConsecutives = "isSimilarWithoutConsecutives",
   hasDiatrics = "hasDiatrics",
   isLongestStreak3orMore = "isLongestStreak3orMore",
+  has3OrMoreSharedLetters = "has3OrMoreSharedLetters",
 }
 
 type Predicate = (input: string, string: string) => boolean;
@@ -49,6 +51,8 @@ export const predicates: Predicates = {
   },
   [Factors.isLongestStreak3orMore]: (input: string, string: string) =>
     findLongestStreak(input, string) >= 3,
+  [Factors.has3OrMoreSharedLetters]: (input: string, string: string) =>
+    getNumberOfSharedLetters(input, string) >= 3,
 };
 
 type ScoringConfig = {
@@ -61,6 +65,7 @@ const defaultScoringConfig: ScoringConfig = {
   [Factors.isSimilarWithoutConsecutives]: 20,
   [Factors.hasDiatrics]: 10,
   [Factors.isLongestStreak3orMore]: 10,
+  [Factors.has3OrMoreSharedLetters]: 5,
 };
 
 export const scoreMatch = (

@@ -4,6 +4,7 @@ import {
 } from "https://deno.land/std@0.159.0/testing/asserts.ts";
 import { Factors, predicates as ps, scoreMatch, scoreMatches } from "./mod.ts";
 import { findLongestStreak } from "./utils/findLongestStreak.ts";
+import { getNumberOfSharedLetters } from "./utils/getNumberOfSharedLetters.ts";
 
 Deno.test("hasExactMatchPredicate works", () => {
   const isFooInFood = ps[Factors.hasExactMatch]("foo", "food");
@@ -69,8 +70,8 @@ Deno.test("scoring matches returns numbers", () => {
 });
 
 Deno.test("find longest streak works", () => {
-  const l = findLongestStreak("ace", "race");
-  assertEquals(l, 3);
+  const l1 = findLongestStreak("ace", "race");
+  assertEquals(l1, 3);
   const l2 = findLongestStreak("camera", "cam");
   assertEquals(l2, 3);
   const l3 = findLongestStreak(
@@ -80,8 +81,15 @@ Deno.test("find longest streak works", () => {
   assertEquals(11, l3);
 });
 
+Deno.test("get number of shared letters", () => {
+  const five = getNumberOfSharedLetters("abcde", "a blue cow drank");
+  assertEquals(five, 5);
+  const two = getNumberOfSharedLetters("foo", "food");
+  assertEquals(two, 2);
+});
+
 Deno.test("scoring and sorting works", () => {
-  const scores = scoreMatches("base", [
+  const scores = scoreMatches("trick", [
     "vase",
     "case",
     "race",
