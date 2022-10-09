@@ -10,6 +10,8 @@ export enum Factors {
   hasDiatrics = "hasDiatrics",
   isLongestStreak3orMore = "isLongestStreak3orMore",
   has3OrMoreSharedLetters = "has3OrMoreSharedLetters",
+  isSameFirstLetter = "isSameFirstLetter",
+  isSameFirst3Letters = "isSameFirst3Letters",
 }
 
 type Predicate = (input: string, string: string) => boolean;
@@ -53,6 +55,16 @@ export const predicates: Predicates = {
     findLongestStreak(input, string) >= 3,
   [Factors.has3OrMoreSharedLetters]: (input: string, string: string) =>
     getNumberOfSharedLetters(input, string) >= 3,
+  [Factors.isSameFirstLetter]: (input: string, string: string) => {
+    const l1 = replaceDiacritics(input.charAt(0));
+    const l2 = replaceDiacritics(string.charAt(0));
+    return l1 === l2;
+  },
+  [Factors.isSameFirst3Letters]: (input: string, string: string) => {
+    const l1 = replaceDiacritics(input.slice(0, 3));
+    const l2 = replaceDiacritics(string.slice(0, 3));
+    return l1 === l2;
+  },
 };
 
 type ScoringConfig = {
@@ -62,10 +74,12 @@ type ScoringConfig = {
 const defaultScoringConfig: ScoringConfig = {
   [Factors.hasExactMatch]: 50,
   [Factors.hasLettersInOrder]: 20,
-  [Factors.isSimilarWithoutConsecutives]: 20,
+  [Factors.isSimilarWithoutConsecutives]: 15,
   [Factors.hasDiatrics]: 10,
   [Factors.isLongestStreak3orMore]: 10,
   [Factors.has3OrMoreSharedLetters]: 5,
+  [Factors.isSameFirstLetter]: 5,
+  [Factors.isSameFirst3Letters]: 10,
 };
 
 export const scoreMatch = (

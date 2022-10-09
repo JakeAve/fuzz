@@ -59,7 +59,7 @@ Deno.test("hasDiatrics works", () => {
   assertEquals(test7, false);
 });
 
-Deno.test("scoring matches returns numbers", () => {
+Deno.test("scoreMatch returns number", () => {
   const s1 = scoreMatch("foo", "food");
   const s2 = scoreMatch("walk", "whamlkd");
   const s3 = scoreMatch("cæsar", "caesar");
@@ -69,7 +69,7 @@ Deno.test("scoring matches returns numbers", () => {
   results.forEach((score) => assertEquals(typeof score, "number"));
 });
 
-Deno.test("find longest streak works", () => {
+Deno.test("findLongestStreak works", () => {
   const l1 = findLongestStreak("ace", "race");
   assertEquals(l1, 3);
   const l2 = findLongestStreak("camera", "cam");
@@ -81,7 +81,7 @@ Deno.test("find longest streak works", () => {
   assertEquals(11, l3);
 });
 
-Deno.test("get number of shared letters", () => {
+Deno.test("getNumberOfSharedLetters works", () => {
   const five = getNumberOfSharedLetters("abcde", "a blue cow drank");
   assertEquals(five, 5);
   const two = getNumberOfSharedLetters("foo", "food");
@@ -90,128 +90,16 @@ Deno.test("get number of shared letters", () => {
 
 Deno.test("scoring and sorting works", () => {
   const scores = scoreMatches("trick", [
-    "vase",
-    "case",
-    "race",
-    "addicted",
-    "grass",
-    "dispensable",
-    "hair",
-    "cross",
-    "debt",
-    "fanatical",
-    "irate",
-    "lock",
-    "tumble",
-    "noisy",
-    "unwieldy",
-    "proud",
-    "rotten",
-    "disillusioned",
-    "memory",
-    "learn",
-    "haunt",
-    "wonderful",
-    "pigs",
-    "multiply",
-    "reject",
-    "notebook",
-    "spring",
-    "faint",
-    "warn",
-    "thrill",
-    "plot",
-    "show",
-    "high",
-    "wrestle",
-    "overjoyed",
-    "acceptable",
-    "pale",
-    "frequent",
-    "jam",
-    "flashy",
-    "announce",
-    "wide",
-    "prickly",
-    "brainy",
-    "ripe",
-    "acrid",
-    "pie",
-    "amazing",
-    "bore",
-    "office",
-    "care",
-    "robin",
-    "drum",
     "train",
-    "grain",
-    "wandering",
-    "kneel",
-    "economic",
-    "befitting",
-    "place",
-    "pies",
-    "shelf",
-    "cherries",
-    "few",
-    "gather",
-    "fang",
-    "wandering",
-    "fail",
-    "honorable",
-    "fish",
-    "shallow",
-    "damaging",
-    "powder",
-    "fairies",
-    "hellish",
-    "future",
-    "calm",
-    "economic",
-    "truculent",
-    "tremendous",
-    "bewildered",
-    "rampant",
-    "cool",
-    "intend",
-    "mere",
-    "adjoining",
-    "dysfunctional",
-    "stew",
-    "selfish",
-    "confused",
-    "wax",
-    "hate",
-    "language",
-    "agreeable",
-    "decisive",
-    "trains",
-    "cheerful",
-    "announce",
-    "alarm",
-    "trick",
-    "rake",
-    "defiant",
-    "well-to-do",
-    "selfish",
-    "rhetorical",
-    "decorous",
-    "clip",
-    "help",
-    "meddle",
-    "behavior",
-    "judge",
-    "testy",
-    "ice",
-    "understood",
-    "shoes",
-    "year",
-    "selective",
-    "romantic",
-    "aquatic",
-    "linen",
-    "butter",
-    "chin",
+    "true",
+    "tamberine",
+    "tacid",
+    "rock",
+    "expert",
+    "food",
+    "brick",
+    "tricky",
+    "trim",
   ]);
   console.table(scores);
   assert(true);
