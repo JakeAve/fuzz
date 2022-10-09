@@ -1,3 +1,4 @@
+import { findLongestStreak } from "./utils/findLongestStreak.ts";
 import { removeConsecutiveDuplicates } from "./utils/removeConsecutiveDuplicates.ts";
 import { replaceDiacritics } from "./utils/replaceDiacritics.ts";
 
@@ -6,6 +7,7 @@ export enum Factors {
   hasLettersInOrder = "hasLettersInOrder",
   isSimilarWithoutConsecutives = "isSimilarWithoutConsecutives",
   hasDiatrics = "hasDiatrics",
+  isLongestStreak3orMore = "isLongestStreak3orMore",
 }
 
 type Predicate = (input: string, string: string) => boolean;
@@ -45,6 +47,8 @@ export const predicates: Predicates = {
       stringWithoutDiatrics
     );
   },
+  [Factors.isLongestStreak3orMore]: (input: string, string: string) =>
+    findLongestStreak(input, string) >= 3,
 };
 
 type ScoringConfig = {
@@ -56,6 +60,7 @@ const defaultScoringConfig: ScoringConfig = {
   [Factors.hasLettersInOrder]: 20,
   [Factors.isSimilarWithoutConsecutives]: 20,
   [Factors.hasDiatrics]: 10,
+  [Factors.isLongestStreak3orMore]: 10,
 };
 
 export const scoreMatch = (

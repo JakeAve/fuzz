@@ -1,9 +1,9 @@
 import {
   assertEquals,
   assert,
-  assertInstanceOf,
 } from "https://deno.land/std@0.159.0/testing/asserts.ts";
-import { Factors, predicates as ps, scoreMatch } from "./mod.ts";
+import { Factors, predicates as ps, scoreMatch, scoreMatches } from "./mod.ts";
+import { findLongestStreak } from "./utils/findLongestStreak.ts";
 
 Deno.test("hasExactMatchPredicate works", () => {
   const isFooInFood = ps[Factors.hasExactMatch]("foo", "food");
@@ -66,4 +66,145 @@ Deno.test("scoring matches returns numbers", () => {
   const s5 = scoreMatch("pkgjson", "packagejson");
   const results = [s1, s2, s3, s4, s5];
   results.forEach((score) => assertEquals(typeof score, "number"));
+});
+
+Deno.test("find longest streak works", () => {
+  const l = findLongestStreak("ace", "race");
+  assertEquals(l, 3);
+  const l2 = findLongestStreak("camera", "cam");
+  assertEquals(l2, 3);
+  const l3 = findLongestStreak(
+    "somefragilistic",
+    "supercalifragilisticexpialidocious"
+  );
+  assertEquals(11, l3);
+});
+
+Deno.test("scoring and sorting works", () => {
+  const scores = scoreMatches("base", [
+    "vase",
+    "case",
+    "race",
+    "addicted",
+    "grass",
+    "dispensable",
+    "hair",
+    "cross",
+    "debt",
+    "fanatical",
+    "irate",
+    "lock",
+    "tumble",
+    "noisy",
+    "unwieldy",
+    "proud",
+    "rotten",
+    "disillusioned",
+    "memory",
+    "learn",
+    "haunt",
+    "wonderful",
+    "pigs",
+    "multiply",
+    "reject",
+    "notebook",
+    "spring",
+    "faint",
+    "warn",
+    "thrill",
+    "plot",
+    "show",
+    "high",
+    "wrestle",
+    "overjoyed",
+    "acceptable",
+    "pale",
+    "frequent",
+    "jam",
+    "flashy",
+    "announce",
+    "wide",
+    "prickly",
+    "brainy",
+    "ripe",
+    "acrid",
+    "pie",
+    "amazing",
+    "bore",
+    "office",
+    "care",
+    "robin",
+    "drum",
+    "train",
+    "grain",
+    "wandering",
+    "kneel",
+    "economic",
+    "befitting",
+    "place",
+    "pies",
+    "shelf",
+    "cherries",
+    "few",
+    "gather",
+    "fang",
+    "wandering",
+    "fail",
+    "honorable",
+    "fish",
+    "shallow",
+    "damaging",
+    "powder",
+    "fairies",
+    "hellish",
+    "future",
+    "calm",
+    "economic",
+    "truculent",
+    "tremendous",
+    "bewildered",
+    "rampant",
+    "cool",
+    "intend",
+    "mere",
+    "adjoining",
+    "dysfunctional",
+    "stew",
+    "selfish",
+    "confused",
+    "wax",
+    "hate",
+    "language",
+    "agreeable",
+    "decisive",
+    "trains",
+    "cheerful",
+    "announce",
+    "alarm",
+    "trick",
+    "rake",
+    "defiant",
+    "well-to-do",
+    "selfish",
+    "rhetorical",
+    "decorous",
+    "clip",
+    "help",
+    "meddle",
+    "behavior",
+    "judge",
+    "testy",
+    "ice",
+    "understood",
+    "shoes",
+    "year",
+    "selective",
+    "romantic",
+    "aquatic",
+    "linen",
+    "butter",
+    "chin",
+  ]);
+  console.table(scores);
+  assert(true);
 });
