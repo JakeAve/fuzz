@@ -12,6 +12,7 @@ export enum Factors {
   has3OrMoreSharedLetters = "has3OrMoreSharedLetters",
   isSameFirstLetter = "isSameFirstLetter",
   isSameFirst3Letters = "isSameFirst3Letters",
+  isSameLength = "isSameLength",
 }
 
 type Predicate = (input: string, string: string) => boolean;
@@ -65,6 +66,8 @@ export const predicates: Predicates = {
     const l2 = replaceDiacritics(string.slice(0, 3));
     return l1 === l2;
   },
+  [Factors.isSameLength]: (input: string, string: string) =>
+    input.length === string.length,
 };
 
 type ScoringConfig = {
@@ -80,6 +83,7 @@ const defaultScoringConfig: ScoringConfig = {
   [Factors.has3OrMoreSharedLetters]: 5,
   [Factors.isSameFirstLetter]: 5,
   [Factors.isSameFirst3Letters]: 10,
+  [Factors.isSameLength]: 2,
 };
 
 export const scoreMatch = (
