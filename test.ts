@@ -59,16 +59,6 @@ Deno.test("hasDiatrics works", () => {
   assertEquals(test7, false);
 });
 
-Deno.test("scoreMatch returns number", () => {
-  const s1 = scoreMatch("foo", "food");
-  const s2 = scoreMatch("walk", "whamlkd");
-  const s3 = scoreMatch("cæsar", "caesar");
-  const s4 = scoreMatch("lluuck", "luckk");
-  const s5 = scoreMatch("pkgjson", "packagejson");
-  const results = [s1, s2, s3, s4, s5];
-  results.forEach((score) => assertEquals(typeof score, "number"));
-});
-
 Deno.test("findLongestStreak works", () => {
   const l1 = findLongestStreak("ace", "race");
   assertEquals(l1, 3);
@@ -88,6 +78,20 @@ Deno.test("getNumberOfSharedLetters works", () => {
   assertEquals(two, 2);
 });
 
+Deno.test("scoreMatch returns number", () => {
+  const s1 = scoreMatch("foo", "food");
+  const s2 = scoreMatch("walk", "whamlkd");
+  const s3 = scoreMatch("cæsar", "caesar");
+  const s4 = scoreMatch("lluuck", "luckk");
+  const s5 = scoreMatch("pkgjson", "packagejson");
+  const results = [s1, s2, s3, s4, s5];
+  results.forEach((score) => assertEquals(typeof score, "number"));
+});
+
+Deno.test("scoreMatch returns 0 on empty string", () => {
+  assertEquals(scoreMatch("", "anything"), 0);
+});
+
 Deno.test("scoring and sorting works", () => {
   const scores = scoreMatches("trick", [
     "train",
@@ -101,6 +105,5 @@ Deno.test("scoring and sorting works", () => {
     "tricky",
     "trim",
   ]);
-  console.table(scores);
-  assert(true);
+  assert(scores);
 });

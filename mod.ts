@@ -87,9 +87,10 @@ export const scoreMatch = (
   string: string,
   config: ScoringConfig = defaultScoringConfig
 ) => {
+  let score = 0;
+  if (input === "") return score;
   input = input.toLowerCase();
   string = string.toLowerCase();
-  let score = 0;
 
   for (const factor in config) {
     const points = config[factor as Factors];
