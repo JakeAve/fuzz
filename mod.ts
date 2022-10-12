@@ -11,6 +11,7 @@ export enum Factors {
   isLongestStreak3orMore = "isLongestStreak3orMore",
   has3OrMoreSharedLetters = "has3OrMoreSharedLetters",
   isSameFirstLetter = "isSameFirstLetter",
+  isSameFirst2Letters = "isSameFirst2Letters",
   isSameFirst3Letters = "isSameFirst3Letters",
   isSameLength = "isSameLength",
 }
@@ -61,6 +62,11 @@ export const predicates: Predicates = {
     const l2 = replaceDiacritics(string.charAt(0));
     return l1 === l2;
   },
+  [Factors.isSameFirst2Letters]: (input: string, string: string) => {
+    const l1 = replaceDiacritics(input.slice(0, 2));
+    const l2 = replaceDiacritics(string.slice(0, 2));
+    return l1 === l2;
+  },
   [Factors.isSameFirst3Letters]: (input: string, string: string) => {
     const l1 = replaceDiacritics(input.slice(0, 3));
     const l2 = replaceDiacritics(string.slice(0, 3));
@@ -82,7 +88,8 @@ const defaultScoringConfig: ScoringConfig = {
   [Factors.isLongestStreak3orMore]: 10,
   [Factors.has3OrMoreSharedLetters]: 5,
   [Factors.isSameFirstLetter]: 5,
-  [Factors.isSameFirst3Letters]: 10,
+  [Factors.isSameFirst2Letters]: 5,
+  [Factors.isSameFirst3Letters]: 5,
   [Factors.isSameLength]: 2,
 };
 
@@ -119,7 +126,10 @@ export const scoreMatches = (
 
   const scores2: Scores = {};
   Object.entries(scores)
-    .sort(([, v1], [, v2]) => v2 - v1)
+    .sort(([w1, v1], [w2, v2]) => {
+      if (v2 === v1) return w1.localeCompare(w2);
+      return v2 - v1;
+    })
     .forEach(([k, v]) => (scores2[k] = v));
 
   return scores2;
