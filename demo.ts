@@ -23,7 +23,6 @@ const getTopMatches = (input: string, maxMatches = 5) => {
 const textEncoder = new TextEncoder();
 const stdoutWrite = (plainText: string) =>
   Deno.stdout.write(textEncoder.encode(plainText));
-const doNothing = () => stdoutWrite("");
 const info = "Use ctl + c to exit";
 
 console.log(`${BR_WHITE}Type something${RESET_COLOR}`);
@@ -31,12 +30,20 @@ console.log(`${BR_WHITE}Type something${RESET_COLOR}`);
 let text = "";
 for await (const keypress of readKeypress()) {
   if (keypress.ctrlKey && keypress.key === "c") {
-    stdoutWrite(SHOW_CURSOR);
+    await stdoutWrite(SHOW_CURSOR);
     Deno.exit(0);
   }
+  if (keypress.ctrlKey && keypress.key === "p") {
+    const matches = scoreMatches(text, workBank);
+    await Deno.writeTextFile(
+      `./.logs/${text}-${new Date().toISOString().replace(/\.|:/g, "-")}.json`,
+      JSON.stringify(matches)
+    );
+    continue;
+  }
 
-  if (!keypress.key?.length) await doNothing();
-  else if (keypress.key.length > 1) {
+  if (!keypress.key?.length) continue;
+  if (keypress.key.length > 1) {
     if (keypress.key === "backspace") text = text.slice(0, -1);
     if (keypress.key === "space") text = text += " ";
   } else {
