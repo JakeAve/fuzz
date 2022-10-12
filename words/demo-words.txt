@@ -1998,3 +1998,202 @@ twist
 kind
 promise
 wander
+guitarra
+guitar
+abeja
+bee
+cuna
+crib
+esposa
+wife
+techo
+ceiling
+cucaracha
+cockroach
+tapa
+lid
+paloma
+dove
+espejo
+mirror
+horno
+oven
+mosca
+fly
+albaricoque
+apricot
+mesita
+end table
+estufa
+stove
+secadora
+dryer
+anguila
+eel
+escalera
+staircase
+playa
+beach
+almohada
+pillow
+tina
+bathtub
+pescadería
+fish store
+piano
+piano
+neblina
+fog
+escurridor
+dish drainer
+voleibol
+americano volleyball
+ping pong
+ping pong
+los zapatos de tacón alto
+high heels
+durazno
+peach
+anaranjado
+orange
+araña
+spider
+destapador
+bottle opener
+cuarto
+bedroom
+oso
+bear
+cuarto de servicios
+laundry room
+esponja
+sponge
+falda
+skirt
+jarrón
+vase
+jarra
+pitcher
+las papas
+potatoes
+cuñado
+brother-in-law
+camaleón
+chameleon
+traje
+suit
+escoba
+broom
+confitería
+candy shop
+las palomitas de maíz
+popcorn
+pared
+wall
+petirrojo
+robin
+oveja
+sheep
+huracán
+hurricane
+maleta
+suitcase
+yerno
+son-in-law
+rosa
+rose
+apio
+celery
+golf
+golf
+toalla
+towel
+tornado
+tornado
+silla
+chair
+humedad
+humidity
+tomate
+tomato
+hermana
+sister
+fútbol
+soccer
+mesa
+table
+rinoceronte
+rhinoceros
+gorra
+ballcap
+salmón
+salmon
+hamburguesa
+hamburger
+arbusto
+bush
+críquet
+cricket
+sobrino
+nephew
+refrigerador
+fridge
+peluquería
+hairdressers
+rábano
+radish
+cebra
+zebra
+pájaro carpintero
+woodpecker
+cocodrilo
+crocodile
+los grandes almacenes
+department store
+lagartija
+lizard
+béisbol
+baseball
+vestido
+dress
+alga
+seaweed
+algodón
+cotton
+orquídea
+orchid
+caja de herramientas
+toolbox
+ratón
+mouse
+despertador
+alarm clock
+sobrina
+niece
+sándwich
+sandwich
+amigo
+friend
+grillo
+cricket
+cobija
+blanket
+chupador
+pacifier
+cerdo
+hog
+bádminton
+badminton
+orilla
+shore
+lima
+lime
+basurero
+trashcan
+mesita de noche
+nightstand
+saltamontes
+grasshopper
+horno microondas
+microwave
+mamá
