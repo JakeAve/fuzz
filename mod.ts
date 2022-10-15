@@ -2,13 +2,14 @@ import { findLongestStreak } from "./utils/findLongestStreak.ts";
 import { getNumberOfSharedLetters } from "./utils/getNumberOfSharedLetters.ts";
 import { removeConsecutiveDuplicates } from "./utils/removeConsecutiveDuplicates.ts";
 import { replaceDiacritics } from "./utils/replaceDiacritics.ts";
+import { replaceVowels } from "./utils/replaceVowels.ts";
 
 export enum Factors {
   hasExactMatch = "hasExactMatch",
-  hasExactMatchWithDiatrics = "hasExactMatchWithDiatrics",
+  hasExactMatchWithDiacritics = "hasExactMatchWithDiacritics",
   hasLettersInOrder = "hasLettersInOrder",
   isSimilarWithoutConsecutives = "isSimilarWithoutConsecutives",
-  hasDiatricsInOrder = "hasDiatricsInOrder",
+  hasDiacriticsInOrder = "hasDiacriticsInOrder",
   isLongestStreak3orMore = "isLongestStreak3orMore",
   isLongestStreak4orMore = "isLongestStreak4orMore",
   has3OrMoreSharedLetters = "has3OrMoreSharedLetters",
@@ -17,6 +18,8 @@ export enum Factors {
   isSameFirst3Letters = "isSameFirst3Letters",
   isSameFirst4Letters = "isSameFirst4Letters",
   isSameLength = "isSameLength",
+  areMoreThanHalfLettersShared = "areMoreThanHalfLettersShared",
+  hasExactMatchWithoutVowels = "hasExactMatchWithoutVowels",
 }
 
 type Predicate = (input: string, string: string) => boolean;
@@ -28,7 +31,7 @@ type Predicates = {
 export const predicates: Predicates = {
   [Factors.hasExactMatch]: (input: string, string: string) =>
     string.includes(input),
-  [Factors.hasExactMatchWithDiatrics]: (input: string, string: string) =>
+  [Factors.hasExactMatchWithDiacritics]: (input: string, string: string) =>
     replaceDiacritics(string).includes(replaceDiacritics(input)),
   [Factors.hasLettersInOrder]: (input: string, string: string) => {
     let result = true;
@@ -50,7 +53,7 @@ export const predicates: Predicates = {
       stringWithoutCons
     );
   },
-  [Factors.hasDiatricsInOrder]: (input: string, string: string) => {
+  [Factors.hasDiacriticsInOrder]: (input: string, string: string) => {
     const inputWithoutDiatrics = replaceDiacritics(input);
     const stringWithoutDiatrics = replaceDiacritics(string);
     return predicates[Factors.hasLettersInOrder](
@@ -86,6 +89,15 @@ export const predicates: Predicates = {
   },
   [Factors.isSameLength]: (input: string, string: string) =>
     input.length === string.length,
+  [Factors.areMoreThanHalfLettersShared]: (input: string, string: string) => {
+    const sharedLetters = getNumberOfSharedLetters(
+      replaceDiacritics(input),
+      replaceDiacritics(string)
+    );
+    return sharedLetters / input.length > 0.5;
+  },
+  [Factors.hasExactMatchWithoutVowels]: (input: string, string: string) =>
+    replaceVowels(string).includes(replaceVowels(input)),
 };
 
 type ScoringConfig = {
@@ -94,10 +106,10 @@ type ScoringConfig = {
 
 const defaultScoringConfig: ScoringConfig = {
   [Factors.hasExactMatch]: 25,
-  [Factors.hasExactMatchWithDiatrics]: 10,
+  [Factors.hasExactMatchWithDiacritics]: 10,
   [Factors.hasLettersInOrder]: 10,
   [Factors.isSimilarWithoutConsecutives]: 10,
-  [Factors.hasDiatricsInOrder]: 10,
+  [Factors.hasDiacriticsInOrder]: 10,
   [Factors.isLongestStreak3orMore]: 10,
   [Factors.isLongestStreak4orMore]: 5,
   [Factors.has3OrMoreSharedLetters]: 5,
@@ -106,6 +118,8 @@ const defaultScoringConfig: ScoringConfig = {
   [Factors.isSameFirst3Letters]: 5,
   [Factors.isSameFirst4Letters]: 5,
   [Factors.isSameLength]: 2,
+  [Factors.areMoreThanHalfLettersShared]: 5,
+  [Factors.hasExactMatchWithoutVowels]: 10,
 };
 
 export const scoreMatch = (

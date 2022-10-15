@@ -45,19 +45,19 @@ Deno.test("isSimilarWithoutConsecutives works", () => {
 });
 
 Deno.test("hasDiatrics works", () => {
-  const test1 = ps[Factors.hasDiatricsInOrder]("ándrés", "andres");
+  const test1 = ps[Factors.hasDiacriticsInOrder]("ándrés", "andres");
   assert(test1);
-  const test2 = ps[Factors.hasDiatricsInOrder]("cliché", "cliche");
+  const test2 = ps[Factors.hasDiacriticsInOrder]("cliché", "cliche");
   assert(test2);
-  const test3 = ps[Factors.hasDiatricsInOrder]("naïve", "naive");
+  const test3 = ps[Factors.hasDiacriticsInOrder]("naïve", "naive");
   assert(test3);
-  const test4 = ps[Factors.hasDiatricsInOrder]("são paulo", "sao paulo");
+  const test4 = ps[Factors.hasDiacriticsInOrder]("são paulo", "sao paulo");
   assert(test4);
-  const test5 = ps[Factors.hasDiatricsInOrder]("piñón", "pinon");
+  const test5 = ps[Factors.hasDiacriticsInOrder]("piñón", "pinon");
   assert(test5);
-  const test6 = ps[Factors.hasDiatricsInOrder]("cæsar", "caesar"); // not the best test
+  const test6 = ps[Factors.hasDiacriticsInOrder]("cæsar", "caesar"); // not the best test
   assert(test6);
-  const test7 = ps[Factors.hasDiatricsInOrder]("françois", "franswa");
+  const test7 = ps[Factors.hasDiacriticsInOrder]("françois", "franswa");
   assertEquals(test7, false);
 });
 
@@ -78,6 +78,23 @@ Deno.test("getNumberOfSharedLetters works", () => {
   assertEquals(five, 5);
   const two = getNumberOfSharedLetters("foo", "food");
   assertEquals(two, 2);
+});
+
+Deno.test("areMoreThanHalfLettersShared works", () => {
+  const shouldBeTrue = ps[Factors.areMoreThanHalfLettersShared]("foo", "food");
+  assert(shouldBeTrue);
+  const shouldBeFalse = ps[Factors.areMoreThanHalfLettersShared](
+    "bollywood",
+    "baffled"
+  );
+  assertEquals(shouldBeFalse, false);
+});
+
+Deno.test("hasExactMatchWithoutVowels works", () => {
+  const s1 = ps[Factors.hasExactMatchWithoutVowels]("moma", "mamá");
+  assert(s1);
+  const s2 = ps[Factors.hasExactMatchWithoutVowels]("mommma", "mamá");
+  assertEquals(s2, false);
 });
 
 Deno.test("scoreMatch returns number", () => {
