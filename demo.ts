@@ -1,5 +1,5 @@
 import { readKeypress } from "https://deno.land/x/keypress@0.0.8/mod.ts";
-import { scoreMatches } from "./mod.ts";
+import { scoreMatches, scoreMatchesDetails } from "./mod.ts";
 
 const BR_WHITE = "\u001b[37;1m";
 const BR_GREEN = "\u001b[32;1m";
@@ -34,7 +34,7 @@ for await (const keypress of readKeypress()) {
     Deno.exit(0);
   }
   if (keypress.ctrlKey && keypress.key === "p") {
-    const matches = scoreMatches(text, workBank);
+    const matches = scoreMatchesDetails(text, workBank);
     await Deno.writeTextFile(
       `./.logs/${text}-${new Date().toISOString().replace(/\.|:/g, "-")}.json`,
       JSON.stringify(matches)
