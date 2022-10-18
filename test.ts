@@ -13,6 +13,13 @@ Deno.test("hasExactMatchPredicate works", () => {
   assertEquals(isDInFoo, false);
 });
 
+Deno.test("hasExactMatchWithDiacritics works", () => {
+  const mamaInmamá = ps[Factors.hasExactMatchWithDiacritics]("mama", "mamá");
+  assert(mamaInmamá);
+  const isDInFoo = ps[Factors.hasExactMatchWithDiacritics]("d", "fóo");
+  assertEquals(isDInFoo, false);
+});
+
 Deno.test("hasLettersInOrder works", () => {
   const fooWithFood = ps[Factors.hasLettersInOrder]("foo", "food");
   assert(fooWithFood);
@@ -44,7 +51,7 @@ Deno.test("isSimilarWithoutConsecutives works", () => {
   assertEquals(ardvarkInElephant, false);
 });
 
-Deno.test("hasDiatrics works", () => {
+Deno.test("hasDiacriticsInOrder works", () => {
   const test1 = ps[Factors.hasDiacriticsInOrder]("ándrés", "andres");
   assert(test1);
   const test2 = ps[Factors.hasDiacriticsInOrder]("cliché", "cliche");
