@@ -167,27 +167,45 @@ export const scoreMatchDetails = (
   return details;
 };
 
-interface Scores {
+export interface ScoresObject {
   [key: string]: number;
+}
+
+export type ScoresArray = string[];
+
+export type ScoresTuple = [string, number][];
+
+interface ScoreMatchesOptions {
+  format?: "array" | "tuple" | "object";
+  min?: number;
+  maxLength?: number;
 }
 
 export const scoreMatches = (
   input: string,
   strings: string[],
+  options: ScoreMatchesOptions = {},
   config?: ScoringConfig
 ) => {
-  const scores: Scores = {};
+  const scores: ScoresObject = {};
   strings.forEach((str) => (scores[str] = scoreMatch(input, str, config)));
 
-  const scores2: Scores = {};
-  Object.entries(scores)
+  const { format = "object", min = 0, maxLength = strings.length } = options;
+
+  const arr = Object.entries(scores)
+    .filter(([, v1], index) => v1 > min && index < maxLength)
     .sort(([w1, v1], [w2, v2]) => {
       if (v2 === v1) return w1.localeCompare(w2);
       return v2 - v1;
-    })
-    .forEach(([k, v]) => (scores2[k] = v));
+    });
 
-  return scores2;
+  if (format === "array") return arr.map(([k]) => k) as ScoresArray;
+  else if (format === "tuple") return arr as ScoresTuple;
+  else {
+    const scores2: ScoresObject = {};
+    arr.forEach(([k, v]) => (scores2[k] = v));
+    return scores2;
+  }
 };
 
 interface ScoreMatchesDetails {
