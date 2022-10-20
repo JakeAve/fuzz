@@ -1,5 +1,5 @@
 import { readKeypress } from "https://deno.land/x/keypress@0.0.8/mod.ts";
-import { scoreMatches, scoreMatchesDetails } from "./mod.ts";
+import { scoreMatches, scoreMatchesDetails, ScoresArray } from "./mod.ts";
 
 const BR_WHITE = "\u001b[37;1m";
 const BR_GREEN = "\u001b[32;1m";
@@ -11,14 +11,6 @@ const CLEAR_SCREEN = "\x1Bc";
 const workBank = new TextDecoder("utf-8")
   .decode(Deno.readFileSync("./words/demo-words.txt"))
   .split("\n");
-
-const getTopMatches = (input: string, maxMatches = 5) => {
-  const matches = scoreMatches(input, workBank);
-  return Object.entries(matches)
-    .filter(([, score]) => score > 0)
-    .slice(0, maxMatches)
-    .map(([word]) => word);
-};
 
 const textEncoder = new TextEncoder();
 const stdoutWrite = (plainText: string) =>
@@ -51,7 +43,11 @@ for await (const keypress of readKeypress()) {
     text += lowercase;
   }
 
-  const matches = getTopMatches(text);
+  const matches = scoreMatches(text, workBank, {
+    maxLength: 5,
+    min: 0,
+    format: "array",
+  }) as ScoresArray;
   const matchString = BR_GREEN + matches.join("\n") + RESET_COLOR;
   const output = `${info}\n\n${text}\n\n${matchString}${HIDE_CURSOR}`;
 

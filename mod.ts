@@ -193,14 +193,17 @@ export const scoreMatches = (
   const { format = "object", min = 0, maxLength = strings.length } = options;
 
   const arr = Object.entries(scores)
-    .filter(([, v1], index) => v1 > min && index < maxLength)
+    .filter(([, v1]) => v1 > min)
     .sort(([w1, v1], [w2, v2]) => {
       if (v2 === v1) return w1.localeCompare(w2);
       return v2 - v1;
-    });
+    })
+    .slice(0, maxLength);
 
-  if (format === "array") return arr.map(([k]) => k) as ScoresArray;
-  else if (format === "tuple") return arr as ScoresTuple;
+  if (format === "array") {
+    console.log(arr);
+    return arr.map(([k]) => k) as ScoresArray;
+  } else if (format === "tuple") return arr as ScoresTuple;
   else {
     const scores2: ScoresObject = {};
     arr.forEach(([k, v]) => (scores2[k] = v));
