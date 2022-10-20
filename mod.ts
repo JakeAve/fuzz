@@ -200,10 +200,8 @@ export const scoreMatches = (
     })
     .slice(0, maxLength);
 
-  if (format === "array") {
-    console.log(arr);
-    return arr.map(([k]) => k) as ScoresArray;
-  } else if (format === "tuple") return arr as ScoresTuple;
+  if (format === "array") return arr.map(([k]) => k) as ScoresArray;
+  else if (format === "tuple") return arr as ScoresTuple;
   else {
     const scores2: ScoresObject = {};
     arr.forEach(([k, v]) => (scores2[k] = v));
