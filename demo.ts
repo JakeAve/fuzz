@@ -1,6 +1,8 @@
 import { readKeypress } from "https://deno.land/x/keypress@0.0.8/mod.ts";
 import { scoreMatches, scoreMatchesDetails, ScoresArray } from "./mod.ts";
 
+const WORD_BANK_PATH = Deno.args[0] || "./words/demo-words.txt";
+
 const BR_WHITE = "\u001b[37;1m";
 const BR_GREEN = "\u001b[32;1m";
 const RESET_COLOR = "\u001b[0m";
@@ -8,9 +10,7 @@ const HIDE_CURSOR = "\x1B[?25l";
 const SHOW_CURSOR = "\x1B[?25h";
 const CLEAR_SCREEN = "\x1Bc";
 
-const workBank = new TextDecoder("utf-8")
-  .decode(Deno.readFileSync("./words/demo-words.txt"))
-  .split("\n");
+const workBank = Deno.readTextFileSync(WORD_BANK_PATH).split("\n");
 
 const textEncoder = new TextEncoder();
 const stdoutWrite = (plainText: string) =>
