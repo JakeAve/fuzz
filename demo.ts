@@ -47,6 +47,7 @@ for await (const keypress of readKeypress()) {
     maxLength: 5,
     min: 0,
     format: "array",
+    minPercentage: 0.25,
   }) as ScoresArray;
   const matchString = BR_GREEN + matches.join("\n") + RESET_COLOR;
   const output = `${info}\n\n${text}\n\n${matchString}${HIDE_CURSOR}`;

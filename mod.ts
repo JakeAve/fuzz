@@ -179,6 +179,7 @@ interface ScoreMatchesOptions {
   format?: "array" | "tuple" | "object";
   min?: number;
   maxLength?: number;
+  minPercentage?: number;
 }
 
 export const scoreMatches = (
@@ -190,10 +191,21 @@ export const scoreMatches = (
   const scores: ScoresObject = {};
   strings.forEach((str) => (scores[str] = scoreMatch(input, str, config)));
 
-  const { format = "object", min = 0, maxLength = strings.length } = options;
+  const {
+    format = "object",
+    min = 0,
+    maxLength = strings.length,
+    minPercentage = 0,
+  } = options;
+
+  const maxScore = Object.values(config || defaultScoringConfig).reduce(
+    (prev, curr) => (prev += curr),
+    0
+  );
+  const minScore = minPercentage * maxScore;
 
   const arr = Object.entries(scores)
-    .filter(([, v1]) => v1 > min)
+    .filter(([, v1]) => v1 > min && v1 > minScore)
     .sort(([w1, v1], [w2, v2]) => {
       if (v2 === v1) return w1.localeCompare(w2);
       return v2 - v1;
