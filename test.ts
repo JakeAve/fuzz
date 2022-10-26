@@ -13,7 +13,7 @@ import {
 import { findLongestStreak } from "./utils/findLongestStreak.ts";
 import { getNumberOfSharedLetters } from "./utils/getNumberOfSharedLetters.ts";
 
-Deno.test("hasExactMatchPredicate works", () => {
+Deno.test("hasExactMatch works", () => {
   const isFooInFood = ps[Factors.hasExactMatch]("foo", "food");
   assert(isFooInFood);
   const isDInFoo = ps[Factors.hasExactMatch]("d", "foo");
@@ -87,11 +87,32 @@ Deno.test("findLongestStreak works", () => {
   assertEquals(11, l3);
 });
 
+Deno.test("isLongestStreak3orMore", () => {
+  const t1 = ps[Factors.isLongestStreak3orMore]("stadium", "titanium");
+  assert(t1);
+  const t2 = ps[Factors.isLongestStreak3orMore]("tough", "stuff");
+  assertEquals(t2, false);
+});
+
+Deno.test("isLongestStreak4orMore", () => {
+  const t1 = ps[Factors.isLongestStreak4orMore]("mysterious", "victorious");
+  assert(t1);
+  const t2 = ps[Factors.isLongestStreak3orMore]("tough", "stuff");
+  assertEquals(t2, false);
+});
+
 Deno.test("getNumberOfSharedLetters works", () => {
   const five = getNumberOfSharedLetters("abcde", "a blue cow drank");
   assertEquals(five, 5);
   const two = getNumberOfSharedLetters("foo", "food");
   assertEquals(two, 2);
+});
+
+Deno.test("has3OrMoreSharedLetters works", () => {
+  const t1 = ps[Factors.has3OrMoreSharedLetters]("mars", "martes");
+  assert(t1);
+  const t2 = ps[Factors.has3OrMoreSharedLetters]("clap", "snap");
+  assertEquals(t2, false);
 });
 
 Deno.test("areMoreThanHalfLettersShared works", () => {
