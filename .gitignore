@@ -3,3 +3,4 @@
 !/words/demo-words.txt
 .logs/**
 !.logs/.gitignore
+/tests/coverage
