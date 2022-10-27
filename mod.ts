@@ -1,125 +1,25 @@
-import { findLongestStreak } from "./utils/findLongestStreak.ts";
-import { getNumberOfSharedLetters } from "./utils/getNumberOfSharedLetters.ts";
-import { removeConsecutiveDuplicates } from "./utils/removeConsecutiveDuplicates.ts";
-import { replaceDiacritics } from "./utils/replaceDiacritics.ts";
-import { replaceVowels } from "./utils/replaceVowels.ts";
-
-export enum Factors {
-  hasExactMatch = "hasExactMatch",
-  hasExactMatchWithDiacritics = "hasExactMatchWithDiacritics",
-  hasLettersInOrder = "hasLettersInOrder",
-  isSimilarWithoutConsecutives = "isSimilarWithoutConsecutives",
-  hasDiacriticsInOrder = "hasDiacriticsInOrder",
-  isLongestStreak3orMore = "isLongestStreak3orMore",
-  isLongestStreak4orMore = "isLongestStreak4orMore",
-  has3OrMoreSharedLetters = "has3OrMoreSharedLetters",
-  isSameFirstLetter = "isSameFirstLetter",
-  isSameFirst2Letters = "isSameFirst2Letters",
-  isSameFirst3Letters = "isSameFirst3Letters",
-  isSameFirst4Letters = "isSameFirst4Letters",
-  isSameLength = "isSameLength",
-  areMoreThanHalfLettersShared = "areMoreThanHalfLettersShared",
-  hasExactMatchWithoutVowels = "hasExactMatchWithoutVowels",
-}
-
-type Predicate = (input: string, string: string) => boolean;
-
-type Predicates = {
-  [k in Factors]: Predicate;
-};
-
-export const predicates: Predicates = {
-  [Factors.hasExactMatch]: (input: string, string: string) =>
-    string.includes(input),
-  [Factors.hasExactMatchWithDiacritics]: (input: string, string: string) =>
-    replaceDiacritics(string).includes(replaceDiacritics(input)),
-  [Factors.hasLettersInOrder]: (input: string, string: string) => {
-    let result = true;
-
-    let str = string;
-    for (const char of input) {
-      const indexOf = str.indexOf(char);
-      if (indexOf >= 0) str = str.slice(indexOf);
-      else result = false;
-    }
-
-    return result;
-  },
-  [Factors.isSimilarWithoutConsecutives]: (input: string, string: string) => {
-    const inputWithoutCons = removeConsecutiveDuplicates(input);
-    const stringWithoutCons = removeConsecutiveDuplicates(string);
-    return predicates[Factors.hasLettersInOrder](
-      inputWithoutCons,
-      stringWithoutCons
-    );
-  },
-  [Factors.hasDiacriticsInOrder]: (input: string, string: string) => {
-    const inputWithoutDiatrics = replaceDiacritics(input);
-    const stringWithoutDiatrics = replaceDiacritics(string);
-    return predicates[Factors.hasLettersInOrder](
-      inputWithoutDiatrics,
-      stringWithoutDiatrics
-    );
-  },
-  [Factors.isLongestStreak3orMore]: (input: string, string: string) =>
-    findLongestStreak(input, string) >= 3,
-  [Factors.isLongestStreak4orMore]: (input: string, string: string) =>
-    findLongestStreak(input, string) >= 4,
-  [Factors.has3OrMoreSharedLetters]: (input: string, string: string) =>
-    getNumberOfSharedLetters(input, string) >= 3,
-  [Factors.isSameFirstLetter]: (input: string, string: string) => {
-    const l1 = replaceDiacritics(input.charAt(0));
-    const l2 = replaceDiacritics(string.charAt(0));
-    return l1 === l2;
-  },
-  [Factors.isSameFirst2Letters]: (input: string, string: string) => {
-    const l1 = replaceDiacritics(input.slice(0, 2));
-    const l2 = replaceDiacritics(string.slice(0, 2));
-    return l1 === l2;
-  },
-  [Factors.isSameFirst3Letters]: (input: string, string: string) => {
-    const l1 = replaceDiacritics(input.slice(0, 3));
-    const l2 = replaceDiacritics(string.slice(0, 3));
-    return l1 === l2;
-  },
-  [Factors.isSameFirst4Letters]: (input: string, string: string) => {
-    const l1 = replaceDiacritics(input.slice(0, 4));
-    const l2 = replaceDiacritics(string.slice(0, 4));
-    return l1 === l2;
-  },
-  [Factors.isSameLength]: (input: string, string: string) =>
-    input.length === string.length,
-  [Factors.areMoreThanHalfLettersShared]: (input: string, string: string) => {
-    const sharedLetters = getNumberOfSharedLetters(
-      replaceDiacritics(input),
-      replaceDiacritics(string)
-    );
-    return sharedLetters / input.length > 0.5;
-  },
-  [Factors.hasExactMatchWithoutVowels]: (input: string, string: string) =>
-    replaceVowels(string).includes(replaceVowels(input)),
-};
+import { PredicateEnum, predicates } from "./predicates.ts";
 
 type ScoringConfig = {
-  [k in Factors]?: number;
+  [k in PredicateEnum]?: number;
 };
 
 const defaultScoringConfig: ScoringConfig = {
-  [Factors.hasExactMatch]: 25,
-  [Factors.hasExactMatchWithDiacritics]: 10,
-  [Factors.hasLettersInOrder]: 10,
-  [Factors.isSimilarWithoutConsecutives]: 10,
-  [Factors.hasDiacriticsInOrder]: 10,
-  [Factors.isLongestStreak3orMore]: 10,
-  [Factors.isLongestStreak4orMore]: 5,
-  [Factors.has3OrMoreSharedLetters]: 5,
-  [Factors.isSameFirstLetter]: 5,
-  [Factors.isSameFirst2Letters]: 5,
-  [Factors.isSameFirst3Letters]: 5,
-  [Factors.isSameFirst4Letters]: 5,
-  [Factors.isSameLength]: 2,
-  [Factors.areMoreThanHalfLettersShared]: 5,
-  [Factors.hasExactMatchWithoutVowels]: 10,
+  [PredicateEnum.hasExactMatch]: 25,
+  [PredicateEnum.hasExactMatchWithDiacritics]: 10,
+  [PredicateEnum.hasLettersInOrder]: 10,
+  [PredicateEnum.isSimilarWithoutConsecutives]: 10,
+  [PredicateEnum.hasDiacriticsInOrder]: 10,
+  [PredicateEnum.isLongestStreak3orMore]: 10,
+  [PredicateEnum.isLongestStreak4orMore]: 5,
+  [PredicateEnum.has3OrMoreSharedLetters]: 5,
+  [PredicateEnum.isSameFirstLetter]: 5,
+  [PredicateEnum.isSameFirst2Letters]: 5,
+  [PredicateEnum.isSameFirst3Letters]: 5,
+  [PredicateEnum.isSameFirst4Letters]: 5,
+  [PredicateEnum.isSameLength]: 2,
+  [PredicateEnum.areMoreThanHalfLettersShared]: 5,
+  [PredicateEnum.hasExactMatchWithoutVowels]: 10,
 };
 
 export const scoreMatch = (
@@ -133,8 +33,8 @@ export const scoreMatch = (
   string = string.toLowerCase();
 
   for (const factor in config) {
-    const points = config[factor as Factors];
-    const pred = predicates[factor as Factors];
+    const points = config[factor as PredicateEnum];
+    const pred = predicates[factor as PredicateEnum];
     if (pred(input, string)) score += points as number;
   }
 
@@ -156,11 +56,11 @@ export const scoreMatchDetails = (
   string = string.toLowerCase();
 
   for (const factor in config) {
-    const points = config[factor as Factors];
-    const pred = predicates[factor as Factors];
+    const points = config[factor as PredicateEnum];
+    const pred = predicates[factor as PredicateEnum];
     if (pred(input, string)) {
       details.score += points as number;
-      details[factor as Factors] = points;
+      details[factor as PredicateEnum] = points;
     }
   }
 

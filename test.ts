@@ -1,57 +1,57 @@
 import {
-  assertEquals,
   assert,
+  assertEquals,
 } from "https://deno.land/std@0.159.0/testing/asserts.ts";
-import {
-  Factors,
-  predicates as ps,
-  scoreMatch,
-  scoreMatches,
-  ScoresArray,
-  ScoresObject,
-} from "./mod.ts";
+import { predicates as ps, PredicateEnum } from "./predicates.ts";
+import { scoreMatch, scoreMatches, ScoresArray, ScoresObject } from "./mod.ts";
 import { findLongestStreak } from "./utils/findLongestStreak.ts";
 import { getNumberOfSharedLetters } from "./utils/getNumberOfSharedLetters.ts";
 
 Deno.test("hasExactMatch works", () => {
-  const isFooInFood = ps[Factors.hasExactMatch]("foo", "food");
+  const isFooInFood = ps[PredicateEnum.hasExactMatch]("foo", "food");
   assert(isFooInFood);
-  const isDInFoo = ps[Factors.hasExactMatch]("d", "foo");
+  const isDInFoo = ps[PredicateEnum.hasExactMatch]("d", "foo");
   assertEquals(isDInFoo, false);
 });
 
 Deno.test("hasExactMatchWithDiacritics works", () => {
-  const mamaInmamá = ps[Factors.hasExactMatchWithDiacritics]("mama", "mamá");
+  const mamaInmamá = ps[PredicateEnum.hasExactMatchWithDiacritics](
+    "mama",
+    "mamá"
+  );
   assert(mamaInmamá);
-  const isDInFoo = ps[Factors.hasExactMatchWithDiacritics]("d", "fóo");
+  const isDInFoo = ps[PredicateEnum.hasExactMatchWithDiacritics]("d", "fóo");
   assertEquals(isDInFoo, false);
 });
 
 Deno.test("hasLettersInOrder works", () => {
-  const fooWithFood = ps[Factors.hasLettersInOrder]("foo", "food");
+  const fooWithFood = ps[PredicateEnum.hasLettersInOrder]("foo", "food");
   assert(fooWithFood);
-  const walkInWhamlkd = ps[Factors.hasLettersInOrder]("walk", "whamlkd");
+  const walkInWhamlkd = ps[PredicateEnum.hasLettersInOrder]("walk", "whamlkd");
   assert(walkInWhamlkd);
-  const pkgJsonInPackageJson = ps[Factors.hasLettersInOrder](
+  const pkgJsonInPackageJson = ps[PredicateEnum.hasLettersInOrder](
     "pkgjson",
     "packagejson"
   );
   assert(pkgJsonInPackageJson);
-  const effInEvanston = ps[Factors.hasLettersInOrder]("eff", "evanston");
+  const effInEvanston = ps[PredicateEnum.hasLettersInOrder]("eff", "evanston");
   assertEquals(effInEvanston, false);
-  const stateIsState = ps[Factors.hasLettersInOrder]("state", "states");
+  const stateIsState = ps[PredicateEnum.hasLettersInOrder]("state", "states");
   assert(stateIsState);
 });
 
 Deno.test("isSimilarWithoutConsecutives works", () => {
-  const fooWithFood = ps[Factors.isSimilarWithoutConsecutives]("foo", "food");
+  const fooWithFood = ps[PredicateEnum.isSimilarWithoutConsecutives](
+    "foo",
+    "food"
+  );
   assert(fooWithFood);
-  const lluuckWithLuck = ps[Factors.isSimilarWithoutConsecutives](
+  const lluuckWithLuck = ps[PredicateEnum.isSimilarWithoutConsecutives](
     "lluuck",
     "luckk"
   );
   assert(lluuckWithLuck);
-  const ardvarkInElephant = ps[Factors.isSimilarWithoutConsecutives](
+  const ardvarkInElephant = ps[PredicateEnum.isSimilarWithoutConsecutives](
     "ardvark",
     "elephant"
   );
@@ -59,19 +59,22 @@ Deno.test("isSimilarWithoutConsecutives works", () => {
 });
 
 Deno.test("hasDiacriticsInOrder works", () => {
-  const test1 = ps[Factors.hasDiacriticsInOrder]("ándrés", "andres");
+  const test1 = ps[PredicateEnum.hasDiacriticsInOrder]("ándrés", "andres");
   assert(test1);
-  const test2 = ps[Factors.hasDiacriticsInOrder]("cliché", "cliche");
+  const test2 = ps[PredicateEnum.hasDiacriticsInOrder]("cliché", "cliche");
   assert(test2);
-  const test3 = ps[Factors.hasDiacriticsInOrder]("naïve", "naive");
+  const test3 = ps[PredicateEnum.hasDiacriticsInOrder]("naïve", "naive");
   assert(test3);
-  const test4 = ps[Factors.hasDiacriticsInOrder]("são paulo", "sao paulo");
+  const test4 = ps[PredicateEnum.hasDiacriticsInOrder](
+    "são paulo",
+    "sao paulo"
+  );
   assert(test4);
-  const test5 = ps[Factors.hasDiacriticsInOrder]("piñón", "pinon");
+  const test5 = ps[PredicateEnum.hasDiacriticsInOrder]("piñón", "pinon");
   assert(test5);
-  const test6 = ps[Factors.hasDiacriticsInOrder]("cæsar", "caesar"); // not the best test
+  const test6 = ps[PredicateEnum.hasDiacriticsInOrder]("cæsar", "caesar"); // not the best test
   assert(test6);
-  const test7 = ps[Factors.hasDiacriticsInOrder]("françois", "franswa");
+  const test7 = ps[PredicateEnum.hasDiacriticsInOrder]("françois", "franswa");
   assertEquals(test7, false);
 });
 
@@ -88,16 +91,19 @@ Deno.test("findLongestStreak works", () => {
 });
 
 Deno.test("isLongestStreak3orMore", () => {
-  const t1 = ps[Factors.isLongestStreak3orMore]("stadium", "titanium");
+  const t1 = ps[PredicateEnum.isLongestStreak3orMore]("stadium", "titanium");
   assert(t1);
-  const t2 = ps[Factors.isLongestStreak3orMore]("tough", "stuff");
+  const t2 = ps[PredicateEnum.isLongestStreak3orMore]("tough", "stuff");
   assertEquals(t2, false);
 });
 
 Deno.test("isLongestStreak4orMore", () => {
-  const t1 = ps[Factors.isLongestStreak4orMore]("mysterious", "victorious");
+  const t1 = ps[PredicateEnum.isLongestStreak4orMore](
+    "mysterious",
+    "victorious"
+  );
   assert(t1);
-  const t2 = ps[Factors.isLongestStreak3orMore]("tough", "stuff");
+  const t2 = ps[PredicateEnum.isLongestStreak3orMore]("tough", "stuff");
   assertEquals(t2, false);
 });
 
@@ -109,16 +115,19 @@ Deno.test("getNumberOfSharedLetters works", () => {
 });
 
 Deno.test("has3OrMoreSharedLetters works", () => {
-  const t1 = ps[Factors.has3OrMoreSharedLetters]("mars", "martes");
+  const t1 = ps[PredicateEnum.has3OrMoreSharedLetters]("mars", "martes");
   assert(t1);
-  const t2 = ps[Factors.has3OrMoreSharedLetters]("clap", "snap");
+  const t2 = ps[PredicateEnum.has3OrMoreSharedLetters]("clap", "snap");
   assertEquals(t2, false);
 });
 
 Deno.test("areMoreThanHalfLettersShared works", () => {
-  const shouldBeTrue = ps[Factors.areMoreThanHalfLettersShared]("foo", "food");
+  const shouldBeTrue = ps[PredicateEnum.areMoreThanHalfLettersShared](
+    "foo",
+    "food"
+  );
   assert(shouldBeTrue);
-  const shouldBeFalse = ps[Factors.areMoreThanHalfLettersShared](
+  const shouldBeFalse = ps[PredicateEnum.areMoreThanHalfLettersShared](
     "bollywood",
     "baffled"
   );
@@ -126,9 +135,9 @@ Deno.test("areMoreThanHalfLettersShared works", () => {
 });
 
 Deno.test("hasExactMatchWithoutVowels works", () => {
-  const s1 = ps[Factors.hasExactMatchWithoutVowels]("moma", "mamá");
+  const s1 = ps[PredicateEnum.hasExactMatchWithoutVowels]("moma", "mamá");
   assert(s1);
-  const s2 = ps[Factors.hasExactMatchWithoutVowels]("mommma", "mamá");
+  const s2 = ps[PredicateEnum.hasExactMatchWithoutVowels]("mommma", "mamá");
   assertEquals(s2, false);
 });
 
