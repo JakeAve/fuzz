@@ -20,6 +20,9 @@ const defaultScoringConfig: ScoringConfig = {
   [PredicateEnum.isSameLength]: 2,
   [PredicateEnum.areMoreThanHalfLettersShared]: 5,
   [PredicateEnum.hasExactMatchWithoutVowels]: 10,
+  [PredicateEnum.isDistanceLessThan50Percent]: 5,
+  [PredicateEnum.isDistanceLessThan20Percent]: 15,
+  [PredicateEnum.isDistanceLessThan10Percent]: 10,
 };
 
 export const scoreMatch = (

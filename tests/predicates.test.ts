@@ -118,3 +118,48 @@ Deno.test("hasExactMatchWithoutVowels works", () => {
   const s2 = ps[PredicateEnum.hasExactMatchWithoutVowels]("mommma", "mamá");
   assertEquals(s2, false);
 });
+
+Deno.test("isDistanceLessThan50Percent works", () => {
+  const t1 = ps[PredicateEnum.isDistanceLessThan50Percent](
+    "0123456789",
+    "01234"
+  );
+  assert(t1);
+  const t2 = ps[PredicateEnum.isDistanceLessThan50Percent](
+    "abcdefghij",
+    "abcdeabcde"
+  );
+  assert(t2);
+  const t3 = ps[PredicateEnum.isDistanceLessThan50Percent]("a", "abcdeabcde");
+  assertEquals(t3, false);
+});
+
+Deno.test("isDistanceLessThan20Percent works", () => {
+  const t1 = ps[PredicateEnum.isDistanceLessThan20Percent](
+    "0123456789",
+    "01234567"
+  );
+  assert(t1);
+  const t2 = ps[PredicateEnum.isDistanceLessThan20Percent](
+    "abcdefghij",
+    "abcdefghyz"
+  );
+  assert(t2);
+  const t3 = ps[PredicateEnum.isDistanceLessThan20Percent]("a", "abcdeabcde");
+  assertEquals(t3, false);
+});
+
+Deno.test("isDistanceLessThan10Percent works", () => {
+  const t1 = ps[PredicateEnum.isDistanceLessThan10Percent](
+    "0123456789",
+    "012345678"
+  );
+  assert(t1);
+  const t2 = ps[PredicateEnum.isDistanceLessThan10Percent](
+    "abcdefghij",
+    "abcdefghiz"
+  );
+  assert(t2);
+  const t3 = ps[PredicateEnum.isDistanceLessThan10Percent]("a", "abcdeabcde");
+  assertEquals(t3, false);
+});

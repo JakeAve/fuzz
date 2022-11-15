@@ -3,6 +3,7 @@ import { getNumberOfSharedLetters } from "./utils/getNumberOfSharedLetters.ts";
 import { removeConsecutiveDuplicates } from "./utils/removeConsecutiveDuplicates.ts";
 import { replaceDiacritics } from "./utils/replaceDiacritics.ts";
 import { replaceVowels } from "./utils/replaceVowels.ts";
+import { levenshteinDistance } from "./utils/levenshteinDistance.ts";
 
 export enum PredicateEnum {
   hasExactMatch = "hasExactMatch",
@@ -20,6 +21,9 @@ export enum PredicateEnum {
   isSameLength = "isSameLength",
   areMoreThanHalfLettersShared = "areMoreThanHalfLettersShared",
   hasExactMatchWithoutVowels = "hasExactMatchWithoutVowels",
+  isDistanceLessThan50Percent = "isDistanceLessThan50Percent",
+  isDistanceLessThan20Percent = "isDistanceLessThan20Percent",
+  isDistanceLessThan10Percent = "isDistanceLessThan10Percent",
 }
 
 type Predicate = (input: string, string: string) => boolean;
@@ -106,4 +110,25 @@ export const predicates: Predicates = {
   },
   [PredicateEnum.hasExactMatchWithoutVowels]: (input: string, string: string) =>
     replaceVowels(string).includes(replaceVowels(input)),
+  [PredicateEnum.isDistanceLessThan50Percent]: (
+    input: string,
+    string: string
+  ) => {
+    const d = levenshteinDistance(input, string);
+    return d / input.length <= 0.5;
+  },
+  [PredicateEnum.isDistanceLessThan20Percent]: (
+    input: string,
+    string: string
+  ) => {
+    const d = levenshteinDistance(input, string);
+    return d / input.length <= 0.2;
+  },
+  [PredicateEnum.isDistanceLessThan10Percent]: (
+    input: string,
+    string: string
+  ) => {
+    const d = levenshteinDistance(input, string);
+    return d / input.length <= 0.1;
+  },
 };
