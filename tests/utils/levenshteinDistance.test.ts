@@ -7,4 +7,7 @@ Deno.test("levenshteinDistance", () => {
 
   const t2 = levenshteinDistance("fast", "fastest");
   assertEquals(t2, 3);
+
+  const t3 = levenshteinDistance("", "mamá");
+  assertEquals(t3, 4);
 });
