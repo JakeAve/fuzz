@@ -46,10 +46,11 @@ for await (const keypress of readKeypress()) {
   const matches = scoreMatches(text, workBank, {
     maxLength: 5,
     min: 0,
-    format: "array",
+    format: "tuple",
     minPercentage: 0.25,
   }) as ScoresArray;
-  const matchString = BR_GREEN + matches.join("\n") + RESET_COLOR;
+  const matchString =
+    BR_GREEN + matches.map(([w, s]) => `${w} - ${s}`).join("\n") + RESET_COLOR;
   const output = `${info}\n\n${text}\n\n${matchString}${HIDE_CURSOR}`;
 
   await stdoutWrite(CLEAR_SCREEN);
