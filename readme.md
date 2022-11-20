@@ -7,3 +7,9 @@ Fuzzy search algorithim in Deno.
 ```
 deno task demo
 ```
+
+## Test
+
+```
+deno test
+```
