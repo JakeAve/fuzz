@@ -148,3 +148,20 @@ export const scoreMatchesDetails = (
 
   return scores2;
 };
+
+const scoreObjects = (
+  input: string,
+  objects: string[],
+  options: ScoreMatchesOptions = {},
+  config?: ScoringConfig
+) => {
+  const map = new Map();
+  for (const o of objects) {
+    const stringed = Object.values(o).join("\n");
+    map.set(o, stringed);
+  }
+  const strings = [];
+  for (const s of map.values()) strings.push(s);
+  const matches = scoreMatches(input, strings, options, config);
+  //objects.map((o) => Object.values(o).join('\n'))
+};
