@@ -149,19 +149,27 @@ export const scoreMatchesDetails = (
   return scores2;
 };
 
-const scoreObjects = (
+export const scoreObjects = (
   input: string,
-  objects: string[],
+  // deno-lint-ignore ban-types
+  objects: object[],
   options: ScoreMatchesOptions = {},
   config?: ScoringConfig
 ) => {
   const map = new Map();
   for (const o of objects) {
     const stringed = Object.values(o).join("\n");
-    map.set(o, stringed);
+    map.set(stringed, o);
   }
   const strings = [];
   for (const s of map.values()) strings.push(s);
   const matches = scoreMatches(input, strings, options, config);
+  console.log({ map, matches, strings });
   //objects.map((o) => Object.values(o).join('\n'))
+  const mapped = (matches as ScoresArray).map((m) => {
+    const foo = map.get(m);
+    console.log({ m, foo });
+    return foo;
+  });
+  return mapped;
 };
