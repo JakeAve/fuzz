@@ -8,6 +8,7 @@ import {
   ScoresArray,
   ScoresObject,
   scoreObjects,
+  ScoresTuple,
 } from "../mod.ts";
 
 Deno.test("scoreMatch returns number", () => {
@@ -127,6 +128,20 @@ Deno.test("scoreMatches maxLength", () => {
   assertEquals(scores.length, 2);
 });
 
+Deno.test("scoreMatched custom predicates", () => {
+  const scores = scoreMatches(
+    "42",
+    ["what", "is", "the", "meaning", "42"],
+    {
+      format: "tuple",
+    },
+    { isTheAnswerToLife: [(_input: string, string) => string === "42", 1000] }
+  ) as ScoresTuple;
+
+  assertEquals(scores.length, 1);
+  assertEquals(scores[0], ['42', 1000]);
+});
+
 Deno.test("scoreObjects", () => {
   const scores = scoreObjects(
     "trick",
@@ -225,6 +240,5 @@ Deno.test("scoreObjects", () => {
     ],
     { format: "array", maxLength: 2 }
   ) as unknown as ScoresArray;
-  console.log({ scores });
   assertEquals(scores.length, 2);
 });

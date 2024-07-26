@@ -15,7 +15,7 @@ const workBank = Deno.readTextFileSync(WORD_BANK_PATH).split("\n");
 const textEncoder = new TextEncoder();
 const stdoutWrite = (plainText: string) =>
   Deno.stdout.write(textEncoder.encode(plainText));
-const info = "Use ctl + c to exit";
+const info = "ctl + c to exit | ctl + p to print a log";
 
 console.log(`${BR_WHITE}Type something${RESET_COLOR}`);
 

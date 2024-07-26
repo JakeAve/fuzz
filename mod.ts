@@ -1,7 +1,13 @@
 import { PredicateEnum, predicates } from "./predicates.ts";
 
+type Predicate = (input: string, string: string) => boolean;
+
+type CustomPredicate = [Predicate, number];
+
 type ScoringConfig = {
   [k in PredicateEnum]?: number;
+} & {
+  [key: string]: number | CustomPredicate;
 };
 
 const defaultScoringConfig: ScoringConfig = {
@@ -22,7 +28,7 @@ const defaultScoringConfig: ScoringConfig = {
   [PredicateEnum.hasExactMatchWithoutVowels]: 10,
   [PredicateEnum.isDistanceLessThan50Percent]: 5,
   [PredicateEnum.isDistanceLessThan20Percent]: 15,
-  [PredicateEnum.isDistanceLessThan10Percent]: 10,
+  [PredicateEnum.isDistanceLessThan10Percent]: 15,
 };
 
 export const scoreMatch = (
@@ -36,16 +42,28 @@ export const scoreMatch = (
   string = string.toLowerCase();
 
   for (const factor in config) {
-    const points = config[factor as PredicateEnum];
-    const pred = predicates[factor as PredicateEnum];
+    let points = 0;
+    let pred: undefined | Predicate;
+    if ((config[factor] as CustomPredicate).length) {
+      pred = (config[factor] as CustomPredicate)[0];
+      points = (config[factor] as CustomPredicate)[1];
+    } else {
+      points = config[factor as PredicateEnum] as number;
+      pred = predicates[factor as PredicateEnum];
+    }
     if (pred(input, string)) score += points as number;
   }
 
   return score;
 };
 
-interface MatchScoreDetails extends ScoringConfig {
+// interface MatchScoreDetails extends ScoringConfig {
+//   score: number;
+// }
+
+interface MatchScoreDetails {
   score: number;
+  details: Record<string, number>;
 }
 
 export const scoreMatchDetails = (
@@ -53,21 +71,28 @@ export const scoreMatchDetails = (
   string: string,
   config: ScoringConfig = defaultScoringConfig
 ) => {
-  const details: MatchScoreDetails = { score: 0 };
-  if (input === "") return details;
+  const matchScoreDetails: MatchScoreDetails = { score: 0, details: {} };
+  if (input === "") return matchScoreDetails;
   input = input.toLowerCase();
   string = string.toLowerCase();
 
   for (const factor in config) {
-    const points = config[factor as PredicateEnum];
-    const pred = predicates[factor as PredicateEnum];
+    let points = 0;
+    let pred: Predicate | undefined;
+    if ((config[factor] as CustomPredicate).length) {
+      pred = (config[factor] as CustomPredicate)[0];
+      points = (config[factor] as CustomPredicate)[1];
+    } else {
+      points = config[factor as PredicateEnum] as number;
+      pred = predicates[factor as PredicateEnum];
+    }
     if (pred(input, string)) {
-      details.score += points as number;
-      details[factor as PredicateEnum] = points;
+      matchScoreDetails.score += points;
+      matchScoreDetails.details[factor] = points;
     }
   }
 
-  return details;
+  return matchScoreDetails;
 };
 
 export interface ScoresObject {
@@ -102,10 +127,18 @@ export const scoreMatches = (
   } = options;
 
   const maxScore = Object.values(config || defaultScoringConfig).reduce(
-    (prev, curr) => (prev += curr),
+    (prev, curr) => {
+      let prevSum = prev as number;
+      if ((curr as CustomPredicate).length) {
+        prevSum += (curr as CustomPredicate)[1];
+      } else {
+        prevSum += curr as number;
+      }
+      return prevSum;
+    },
     0
   );
-  const minScore = minPercentage * maxScore;
+  const minScore = minPercentage * (maxScore as number);
 
   const arr = Object.entries(scores)
     .filter(([, v1]) => v1 > min && v1 > minScore)
@@ -151,7 +184,6 @@ export const scoreMatchesDetails = (
 
 export const scoreObjects = (
   input: string,
-  // deno-lint-ignore ban-types
   objects: object[],
   options: ScoreMatchesOptions = {},
   config?: ScoringConfig
@@ -162,13 +194,10 @@ export const scoreObjects = (
     map.set(stringed, o);
   }
   const strings = [];
-  for (const s of map.values()) strings.push(s);
+  for (const s of map.keys()) strings.push(s);
   const matches = scoreMatches(input, strings, options, config);
-  console.log({ map, matches, strings });
-  //objects.map((o) => Object.values(o).join('\n'))
   const mapped = (matches as ScoresArray).map((m) => {
     const foo = map.get(m);
-    console.log({ m, foo });
     return foo;
   });
   return mapped;
