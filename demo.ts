@@ -1,4 +1,4 @@
-import { readKeypress } from "https://deno.land/x/keypress@0.0.8/mod.ts";
+import { readKeypress } from "https://deno.land/x/keypress@0.0.11/mod.ts";
 import { scoreMatches, scoreMatchesDetails, ScoresArray } from "./mod.ts";
 
 const WORD_BANK_PATH = Deno.args[0] || "./words/demo-words.txt";

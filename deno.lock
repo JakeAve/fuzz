@@ -1,0 +1,8 @@
+{
+  "version": "3",
+  "remote": {
+    "https://deno.land/x/fastest_levenshtein@1.0.10/mod.ts": "aea49d54b6bb37082b2377da2ea068331da07b2a515621d8eff97538b7157b40",
+    "https://deno.land/x/keypress@0.0.11/mod.ts": "22fe0ea62136f3015149c639f891076a5b2312c0b8974c4a2bd8acaaded61c61",
+    "https://deno.land/x/keypress@0.0.8/mod.ts": "66461ddc1aae084f9fd51dd5f655865bff9dd72f14fb4e0c8ec10f38b97afadf"
+  }
+}

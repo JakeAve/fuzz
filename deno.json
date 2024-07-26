@@ -1,6 +1,6 @@
 {
   "tasks": {
-    "demo": "deno run --unstable --allow-read=./words --allow-write=./.logs demo.ts",
+    "demo": "deno run --allow-read=./words --allow-write=./.logs demo.ts",
     "test": "deno test",
     "test:coverage": "rm -rf ./tests/coverage && mkdir ./tests/coverage && deno test --coverage=./tests/coverage && deno coverage ./tests/coverage"
   }
